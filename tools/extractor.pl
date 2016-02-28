@@ -41,8 +41,10 @@ while (<>) {
     s/\[//g;                # remove [ and ]
     s/\]//g;
     s/&[^;]*;/ /g;          # remove URL encoded chars
-	s/'//g;					# quitamos los apostrofes, antes se convertian a espacio(error)
+    s/'//g;					# quitamos los apostrofes, antes se convertian a espacio(error)
 
+    s/\(//g;        # quitamos los parentesis
+    s/\)//g;
 
     # convert to lowercase letters and spaces, spell digits
     $_=" $_ ";
@@ -58,9 +60,9 @@ while (<>) {
     s/8/ eight /g;
     s/9/ nine /g;
     tr/(a-z)\./  /cs;
-	if($sentence_per_line) {
-		s/\./\n/g;					# quitamos los apostrofes, antes se convertian a espacio(error)
-	}
+    if($sentence_per_line) {
+      s/\./\n/g;					# quitamos los apostrofes, antes se convertian a espacio(error)
+    }
     chop;
     print $_;
   }
