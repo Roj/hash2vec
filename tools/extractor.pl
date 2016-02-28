@@ -15,9 +15,9 @@ $sentence_per_line = 0;
 
 $/=">";                     # input record separator
 while (<>) {
-  #if (/<text /) {$text=1;}  # remove all but between <text> ... </text>
-  #if (/#redirect/i) {$text=0;}  # remove #REDIRECT
-  if (1) {
+  if (/<text /) {$text=1;}  # remove all but between <text> ... </text>
+  if (/#redirect/i) {$text=0;}  # remove #REDIRECT
+  if ($text) {
 
     # Remove any text not normally visible
     if (/<\/text>/) {$text=0;}
