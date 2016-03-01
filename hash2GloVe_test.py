@@ -30,20 +30,19 @@ arg_file = sys.argv[4]
 
 modelname =arg_file+"_"+str(arg_k)+"_"+str(arg_vec_len)+"_"+str(arg_model)+".json.bz2"
 print "Model: "+modelname
+
 def dot(a,b):
-    return sum( [a[i]*b[i] for i in range(len(b))] )
+	return np.dot(a,b)
 
 # Normalize a vector
 def norm(V):
-    L = sqrt( sum( [x**2 for x in V] ) )
-    if L>0:
-        return [ x/L for x in V ]
-    else:
-        return V
+    L = np.linalg.norm(V)
+    if L>0: return V/L
+    return V
 
 # Cosine distance
 def distance(a,b):
-    return  1-dot(norm(a),norm(b)) #cosine similarity
+	return scipy.spatial.distance.cosine(a,b) # ya incluye el 1-cos(ab)
 	#return sum(pow(a[i]-b[i],2) for i in range(len(b))) #euclidean norm
 	#pearson correlation in negative so lower is better
 	#return 1- dot(norm(a),norm(b))

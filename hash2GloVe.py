@@ -14,12 +14,7 @@ import sys
 import numpy as np
 from scipy import spatial
 import bz2,json,contextlib
-import numpy as np
 from random import sample
-from nltk import PorterStemmer
-# 211 plain
-
-
 
 if len(sys.argv)!=5:
     print "Use:"
@@ -52,21 +47,6 @@ total_words = 0
 word_vectors = {}
 
 
-# Dot product
-def dot(a,b):
-	return np.dot(a,b)
-
-# Normalize a vector
-def norm(V):
-    L = np.linalg.norm(V)
-    if L>0: return V/L
-    return V
-
-# Cosine distance
-def distance(a,b):
-	return scipy.spatial.distance.cosine(a,b) # ya incluye el 1-cos(ab)
-
-
 for line in file(text_filename):
     words = line.split()
     word_position = 0
@@ -78,7 +58,7 @@ for line in file(text_filename):
 			word_vectors[w] = {}
 			word_vectors[w]['frq']=0
 			word_vectors[w]['vec'] = [float(0)] * vec_len
-			word_vectors[w]['h']= hash(PorterStemmer().stem_word(w))%vec_len
+			word_vectors[w]['h']= hash(w)%vec_len
 
 		word_vectors[w]['frq']+=1
 		if total_words % 1000000 == 0:
@@ -117,11 +97,14 @@ for line in file(text_filename):
 
 print "Processed a total of: "+str(total_words)+" words in text found: "+str(len(word_vectors))+" different words"
 
+
+#TODO: Operate over vector before log-normalizing
 if arg_model=='log':
     print "Log normalizing..."
     for w in word_vectors:
         for i in range(len(word_vectors[w]['vec'])):
             if word_vectors[w]['vec'][i]>0:
+				#surely if we just log each component we can vectorize it..
                 word_vectors[w]['vec'][i]=log(word_vectors[w]['vec'][i])
     print "Done!"
 
