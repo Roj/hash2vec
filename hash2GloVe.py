@@ -70,6 +70,7 @@ def distance(a,b):
 for line in file(text_filename):
     words = line.split()
     word_position = 0
+	context = [""]*k #empty context every line
     for w in words:
         word_position+=1
 		total_words+=1 
@@ -86,28 +87,29 @@ for line in file(text_filename):
 		# Do the context operations
 		for j in range(1,min([word_position-1,k])+1):
 			context_word = context[k-j]
-			#weight = float(1)/j
-			weight = float(k-j+1)/k
-			# For w hash context word and add it
-			position = hash(context_word)%vec_len
-			
-			#don't calculate it unless it's the model
-			sign = 1
-			if arg_model == "wei":
-				h2 = hash(context_word[::-1]) %2
-				if h2 == 1:
-					sign = -1
-			
-			word_vectors[w]['vec'][position]+=(sign*weight)
-			
-			# For context word hash w and add it
-			position = hash(w)%vec_len
-			sign = 1
-			if arg_model == "wei":
-				h2 = h2 = hash(w[::-1]) %2
-				if h2 == 1:
-					sign = -1
-			word_vectors[context_word]['vec'][position]+=(sign*weight)
+			if context_word != "":
+				#weight = float(1)/j
+				weight = float(k-j+1)/k
+				# For w hash context word and add it
+				position = hash(context_word)%vec_len
+				
+				#don't calculate it unless it's the model
+				sign = 1
+				if arg_model == "wei":
+					h2 = hash(context_word[::-1]) %2
+					if h2 == 1:
+						sign = -1
+				
+				word_vectors[w]['vec'][position]+=(sign*weight)
+				
+				# For context word hash w and add it
+				position = hash(w)%vec_len
+				sign = 1
+				if arg_model == "wei":
+					h2 = h2 = hash(w[::-1]) %2
+					if h2 == 1:
+						sign = -1
+				word_vectors[context_word]['vec'][position]+=(sign*weight)
 
             # Shift the context
             context.pop(0)
